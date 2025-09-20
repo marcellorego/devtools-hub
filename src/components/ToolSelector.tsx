@@ -16,42 +16,42 @@ const tools: Tool[] = [
   {
     id: 'jwt',
     name: 'JWT Decoder',
-    icon: <Key size={20} />,
+    icon: <Key size={24} />,
     color: 'from-purple-500 to-pink-500',
     glowColor: 'shadow-purple-500/50'
   },
   {
     id: 'base64',
     name: 'Base64',
-    icon: <Code size={20} />,
+    icon: <Code size={24} />,
     color: 'from-blue-500 to-cyan-500',
     glowColor: 'shadow-blue-500/50'
   },
   {
     id: 'url',
     name: 'URL Coder',
-    icon: <Link size={20} />,
+    icon: <Link size={24} />,
     color: 'from-green-500 to-emerald-500',
     glowColor: 'shadow-green-500/50'
   },
   {
     id: 'epoch',
     name: 'Time Converter',
-    icon: <Clock size={20} />,
+    icon: <Clock size={24} />,
     color: 'from-orange-500 to-red-500',
     glowColor: 'shadow-orange-500/50'
   },
   {
     id: 'uuid',
     name: 'UUID Gen',
-    icon: <Zap size={20} />,
+    icon: <Zap size={24} />,
     color: 'from-yellow-500 to-orange-500',
     glowColor: 'shadow-yellow-500/50'
   },
   {
     id: 'hash',
     name: 'Hash Tool',
-    icon: <Hash size={20} />,
+    icon: <Hash size={24} />,
     color: 'from-indigo-500 to-purple-500',
     glowColor: 'shadow-indigo-500/50'
   }
@@ -62,11 +62,7 @@ export const ToolSelector: React.FC = () => {
   const setActiveTool = useAppStore((state) => state.setActiveTool);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Debug: Log tools array
-  React.useEffect(() => {
-    console.log('Tools array:', tools);
-    console.log('Active tool:', activeTool);
-  }, [activeTool]);
+  // Remove debug logging for production
 
   return (
     <div>
@@ -170,30 +166,28 @@ export const ToolSelector: React.FC = () => {
             }}
           />
 
-          {/* Tool buttons in a circle - responsive sizing */}
-          <div className="relative w-96 h-96">
+          {/* Tool buttons in a circle - improved positioning */}
+          <div className="relative w-[28rem] h-[28rem]">
             {tools.map((tool, index) => {
               const angle = (index * 360) / tools.length;
-              const radius = 140; // Increased radius for better spacing
+              const radius = 160; // Optimized radius for 6 tools
               const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
               const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
 
               const isActive = activeTool === tool.id;
 
-              // Debug logging
-              console.log(`Tool ${index}: ${tool.name}, angle: ${angle}, x: ${x}, y: ${y}, active: ${isActive}`);
-
               return (
                 <motion.button
                   key={tool.id}
                 className={clsx(
-                  "absolute w-16 h-16 rounded-full flex items-center justify-center",
+                  "absolute w-20 h-20 rounded-full flex items-center justify-center",
                   "bg-gradient-to-r transition-all duration-300",
                   "hover:scale-110 hover:shadow-2xl",
                   "focus:outline-none focus:ring-2 focus:ring-white/50",
+                  "border-2 border-white/20",
                   tool.color,
                   tool.glowColor,
-                  isActive && "ring-4 ring-white/70 scale-125 shadow-2xl"
+                  isActive && "ring-4 ring-white/70 scale-125 shadow-2xl border-white/50"
                 )}
                   style={{
                     left: '50%',
@@ -232,20 +226,21 @@ export const ToolSelector: React.FC = () => {
                     {tool.icon}
                   </motion.div>
 
-                  {/* Tool label - show for all tools with better positioning */}
+                  {/* Tool label - improved positioning and visibility */}
                   <motion.div
                     className={clsx(
-                      "absolute -bottom-14 left-1/2 -translate-x-1/2",
-                      "text-xs font-medium text-white/80 whitespace-nowrap",
-                      "bg-black/60 px-2 py-1 rounded-md backdrop-blur-sm",
-                      "pointer-events-none",
-                      isActive && "bg-purple-600/80 text-white border border-purple-400/50"
+                      "absolute -bottom-16 left-1/2 -translate-x-1/2",
+                      "text-xs font-medium text-white/90 whitespace-nowrap",
+                      "bg-black/80 px-3 py-1.5 rounded-lg backdrop-blur-sm",
+                      "pointer-events-none shadow-lg",
+                      "border border-white/10",
+                      isActive && "bg-purple-600/90 text-white border-purple-400/60 shadow-purple-500/50"
                     )}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{
-                      opacity: isActive ? 1 : 0.6,
-                      y: isActive ? 0 : 5,
-                      scale: isActive ? 1 : 0.9
+                      opacity: isActive ? 1 : 0.8,
+                      y: isActive ? 0 : 3,
+                      scale: isActive ? 1.05 : 0.95
                     }}
                     transition={{ duration: 0.2 }}
                   >
@@ -255,24 +250,24 @@ export const ToolSelector: React.FC = () => {
               );
             })}
 
-            {/* Center hub */}
+            {/* Center hub - proportional to larger circle */}
             <motion.div
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500/50 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500/50 flex items-center justify-center shadow-2xl">
                 <motion.div
-                  className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center"
+                  className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center"
                   animate={{
                     boxShadow: [
-                      "0 0 20px rgba(147, 51, 234, 0.3)",
-                      "0 0 40px rgba(147, 51, 234, 0.6)",
-                      "0 0 20px rgba(147, 51, 234, 0.3)"
+                      "0 0 25px rgba(147, 51, 234, 0.4)",
+                      "0 0 50px rgba(147, 51, 234, 0.7)",
+                      "0 0 25px rgba(147, 51, 234, 0.4)"
                     ]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <Zap className="text-white" size={24} />
+                  <Zap className="text-white" size={28} />
                 </motion.div>
               </div>
             </motion.div>
