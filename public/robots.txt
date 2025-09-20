@@ -6,7 +6,7 @@ User-agent: *
 Allow: /
 
 # Future enhancements
-# Sitemap: https://username.github.io/devtools-hub/sitemap.xml
+# Sitemap: https://marcellorego.github.io/devtools-hub/sitemap.xml
 
 # Crawl-delay: not needed for static site
 # Disallow: none (public developer tools should be fully discoverable)

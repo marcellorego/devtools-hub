@@ -2,7 +2,7 @@
   "name": "devtools-hub",
   "version": "1.0.0",
   "description": "A creative developer tools hub with spaceship control panel UI",
-  "homepage": "https://username.github.io/devtools-hub",
+  "homepage": "https://marcellorego.github.io/devtools-hub",
   "type": "module",
   "scripts": {
     "dev": "vite",

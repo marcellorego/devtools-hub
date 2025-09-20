@@ -645,7 +645,7 @@ User-agent: *
 Allow: /
 
 # Future sitemap reference
-# Sitemap: https://username.github.io/devtools-hub/sitemap.xml
+# Sitemap: https://marcellorego.github.io/devtools-hub/sitemap.xml
 ```
 
 **Implementation Details**:
@@ -665,7 +665,7 @@ Allow: /
 <meta property="og:title" content="DevTools Hub - Developer Tools Suite">
 <meta property="og:description" content="Essential developer tools with spaceship control panel UI">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://username.github.io/devtools-hub/">
+<meta property="og:url" content="https://marcellorego.github.io/devtools-hub/">
 ```
 
 #### 9.11.3 Search Engine Optimization Strategy
