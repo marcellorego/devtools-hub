@@ -261,7 +261,7 @@ export const ToolSelector: React.FC = () => {
                     {/* Active indicator */}
                     {isActive && (
                       <motion.div
-                        className="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"
+                        className="absolute -left-3 top-0 w-1 h-16 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"
                         initial={{ scaleY: 0 }}
                         animate={{ scaleY: 1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
