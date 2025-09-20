@@ -13,5 +13,19 @@ export default defineConfig({
     globals: true,
     // Retry flaky tests in CI
     retry: process.env.CI ? 2 : 0,
+    // Additional environment configuration for CI stability
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+        runScripts: 'dangerously',
+      },
+    },
+    // Pool options for better CI compatibility
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: process.env.CI ? true : false,
+      },
+    },
   },
 })
