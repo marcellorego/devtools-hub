@@ -167,7 +167,7 @@ export const ToolSelector: React.FC = () => {
           />
 
           {/* Control panel container */}
-          <div className="relative bg-gradient-to-b from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 shadow-2xl">
+          <div className="relative bg-gradient-to-b from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 shadow-2xl overflow-visible">
             
             {/* Hub header */}
             <motion.div
@@ -199,7 +199,7 @@ export const ToolSelector: React.FC = () => {
             </motion.div>
 
             {/* Tool buttons in vertical stack */}
-            <div className="space-y-3">
+            <div className="space-y-3 overflow-visible">
               {tools.map((tool, index) => {
                 const isActive = activeTool === tool.id;
 
@@ -219,6 +219,7 @@ export const ToolSelector: React.FC = () => {
                       "hover:scale-110 hover:shadow-xl",
                       "focus:outline-none focus:ring-2 focus:ring-purple-500/50",
                       "border border-white/10",
+                      "overflow-visible", // Ensure tooltips aren't clipped
                       tool.color,
                       isActive && "ring-2 ring-purple-400/70 scale-110 shadow-xl border-purple-400/50"
                     )}
@@ -226,6 +227,7 @@ export const ToolSelector: React.FC = () => {
                     aria-pressed={isActive}
                     role="button"
                     tabIndex={0}
+                    title={tool.name} // Fallback tooltip for accessibility
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     whileTap={{ scale: 0.95 }}
                     initial={{ opacity: 0, x: -20 }}
@@ -247,16 +249,17 @@ export const ToolSelector: React.FC = () => {
                       {tool.icon}
                     </motion.div>
 
-                    {/* Tooltip on hover */}
-                    <motion.div
-                      className="absolute left-20 top-1/2 -translate-y-1/2 bg-gray-900/95 text-white text-sm px-3 py-2 rounded-lg backdrop-blur-sm border border-gray-700/50 shadow-xl pointer-events-none opacity-0 group-hover:opacity-100 whitespace-nowrap z-10"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileHover={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {tool.name}
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-gray-900/95"></div>
-                    </motion.div>
+                    {/* Enhanced Tooltip on hover */}
+                    <div className="absolute left-20 top-1/2 -translate-y-1/2 pointer-events-none whitespace-nowrap z-20 opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 scale-95 group-hover:scale-100 transition-all duration-300 ease-out">
+                      <div className="bg-gradient-to-r from-gray-900/98 to-gray-800/98 text-white text-sm font-medium px-4 py-3 rounded-xl backdrop-blur-lg border border-gray-600/50 shadow-2xl shadow-black/40">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${tool.color} animate-pulse`}></div>
+                          {tool.name}
+                        </div>
+                        {/* Enhanced tooltip arrow */}
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-[6px] border-b-[6px] border-r-[8px] border-transparent border-r-gray-900/98"></div>
+                      </div>
+                    </div>
 
                     {/* Active indicator */}
                     {isActive && (
