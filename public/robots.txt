@@ -1,0 +1,12 @@
+# DevTools Hub - robots.txt
+# Guide for search engine crawlers
+
+# Allow all web crawlers to access all content
+User-agent: *
+Allow: /
+
+# Future enhancements
+# Sitemap: https://username.github.io/devtools-hub/sitemap.xml
+
+# Crawl-delay: not needed for static site
+# Disallow: none (public developer tools should be fully discoverable)

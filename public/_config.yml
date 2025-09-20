@@ -1,0 +1,18 @@
+# GitHub Pages configuration for SPA routing
+# This ensures all routes are redirected to index.html for client-side routing
+include: ['_redirects']
+plugins:
+  - jekyll-redirect-from
+
+# Exclude files from Jekyll processing
+exclude:
+  - node_modules/
+  - .bundle/
+  - vendor/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - .bundle
+  - .sass-cache
+  - .jekyll-cache
+  - gemfiles
