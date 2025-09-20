@@ -51,8 +51,8 @@ global.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
     json: () => Promise.resolve({}),
-  })
-) as any;
+  } as Response)
+) as typeof fetch;
 
 // Mock crypto.subtle for HashTool tests
 Object.defineProperty(window, 'crypto', {
