@@ -72,9 +72,9 @@ describe('Base64Tool', () => {
     fireEvent.change(input, { target: { value: 'invalid!!!' } });
 
     await waitFor(() => {
-      // Should show some output (even if it's garbled) but not crash
-      const output = screen.getByText(/^[^]*$/);
-      expect(output).toBeInTheDocument();
+      // Should either show error or handle gracefully without crashing
+      // In test environment, Buffer.from is more lenient, so just ensure component doesn't crash
+      expect(screen.getByText('Decoding Mode')).toBeInTheDocument();
     });
   });
 

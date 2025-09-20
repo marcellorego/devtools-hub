@@ -45,6 +45,19 @@ export const JwtDecoder: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'header' | 'payload' | 'signature'>('payload');
   const { copyToClipboard, copied } = useClipboard();
 
+  // Helper function to convert base64url to Uint8Array
+  const base64UrlToUint8Array = useCallback((base64url: string): Uint8Array => {
+    const base64 = base64url
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }, []);
+
   // Function to fetch JWKS from an issuer
   const fetchJwks = useCallback(async (jwksUri: string): Promise<JwksResponse> => {
     const response = await fetch(jwksUri);
@@ -149,19 +162,6 @@ export const JwtDecoder: React.FC = () => {
       };
     }
   }, [fetchJwks, base64UrlToUint8Array]);
-
-  // Helper function to convert base64url to Uint8Array
-  const base64UrlToUint8Array = useCallback((base64url: string): Uint8Array => {
-    const base64 = base64url
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-    const rawData = atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  }, []);
 
   useEffect(() => {
     setError('');

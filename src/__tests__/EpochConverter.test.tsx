@@ -25,9 +25,8 @@ describe('EpochConverter', () => {
     fireEvent.change(input, { target: { value: '1704067200' } });
 
     await waitFor(() => {
-      // Should show some date output
-      const output = screen.getByText(/^[^]*$/);
-      expect(output).toBeInTheDocument();
+      // Should show date output in the result area
+      expect(screen.getByText(/2024/)).toBeInTheDocument();
     });
   });
 
@@ -42,9 +41,8 @@ describe('EpochConverter', () => {
     fireEvent.change(input, { target: { value: '2024-01-01 00:00:00' } });
 
     await waitFor(() => {
-      // Should show epoch timestamp
-      const output = screen.getByText(/^[^]*$/);
-      expect(output).toBeInTheDocument();
+      // Should show epoch timestamp output
+      expect(screen.getByText(/^\d+$/)).toBeInTheDocument();
     });
   });
 
@@ -77,7 +75,7 @@ describe('EpochConverter', () => {
     fireEvent.click(nowButton);
     // Should populate input with current timestamp
     const input = screen.getByPlaceholderText((content) => content.includes('1704067200'));
-    expect(input).toHaveValue(/^[^]+$/);
+    expect(input.value).toMatch(/^\d+$/); // Should be a numeric timestamp
   });
 
   it('shows current date', () => {
@@ -93,7 +91,7 @@ describe('EpochConverter', () => {
     fireEvent.click(nowButton);
     // Should populate input with current date
     const input = screen.getByPlaceholderText((content) => content.includes('2024-01-01 00:00:00'));
-    expect(input).toHaveValue(/^[^]+$/);
+    expect(input.value).toMatch(/^\d{4}-\d{2}-\d{2}/); // Should be a date format
   });
 
   it('handles invalid input gracefully', async () => {
