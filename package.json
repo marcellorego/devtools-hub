@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "test": "vitest",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "test:quick": "vitest --run --reporter=json --outputFile=/tmp/test-results.json",
     "test:summary": "npm run test:quick && cat /tmp/test-results.json | jq '{success: .success, passed: .numPassedTests, failed: .numFailedTests, total: .numTotalTests}'"
   },
