@@ -12,14 +12,6 @@ export const HashTool: React.FC = () => {
   const [processingTime, setProcessingTime] = useState<number>(0);
   const { copyToClipboard, copied } = useClipboard();
 
-  // Algorithm mapping for Web Crypto API
-  const algorithmMap = {
-    'SHA-1': 'SHA-1',
-    'SHA-256': 'SHA-256',
-    'SHA-384': 'SHA-384',
-    'SHA-512': 'SHA-512'
-  };
-
   useEffect(() => {
     if (!input.trim()) {
       setHash('');
@@ -32,6 +24,14 @@ export const HashTool: React.FC = () => {
       const startTime = performance.now();
 
       try {
+        // Algorithm mapping for Web Crypto API
+        const algorithmMap = {
+          'SHA-1': 'SHA-1',
+          'SHA-256': 'SHA-256',
+          'SHA-384': 'SHA-384',
+          'SHA-512': 'SHA-512'
+        } as const;
+
         const encoder = new TextEncoder();
         const data = encoder.encode(input);
         const hashBuffer = await crypto.subtle.digest(algorithmMap[algorithm], data);

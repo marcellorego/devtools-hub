@@ -110,7 +110,7 @@ export class SecurityUtils {
    * Secure local storage wrapper with encryption
    */
   static secureStorage = {
-    set(key: string, value: any): void {
+    set(key: string, value: unknown): void {
       try {
         const serialized = JSON.stringify(value);
         // In a real app, you'd encrypt this

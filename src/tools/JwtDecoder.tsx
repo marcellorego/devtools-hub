@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Key, CheckCircle, XCircle, AlertTriangle, Clock } from 'lucide-react';
 import { useClipboard } from '../hooks/useClipboard';
 
 interface JwtParts {
-  header: any;
-  payload: any;
+  header: Record<string, unknown>;
+  payload: Record<string, unknown>;
   signature: string;
 }
 
@@ -24,7 +24,7 @@ interface JwkKey {
   n?: string;
   e?: string;
   x5c?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface JwksResponse {
@@ -34,7 +34,7 @@ interface JwksResponse {
 interface OpenIdConfiguration {
   issuer: string;
   jwks_uri: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const JwtDecoder: React.FC = () => {
@@ -46,16 +46,16 @@ export const JwtDecoder: React.FC = () => {
   const { copyToClipboard, copied } = useClipboard();
 
   // Function to fetch JWKS from an issuer
-  const fetchJwks = async (jwksUri: string): Promise<JwksResponse> => {
+  const fetchJwks = useCallback(async (jwksUri: string): Promise<JwksResponse> => {
     const response = await fetch(jwksUri);
     if (!response.ok) {
       throw new Error(`Failed to fetch JWKS: ${response.status}`);
     }
     return response.json();
-  };
+  }, []);
 
   // Function to verify JWT signature
-  const verifyJwtSignature = async (jwt: string, header: any, payload: any): Promise<VerificationResult> => {
+  const verifyJwtSignature = useCallback(async (jwt: string, header: Record<string, unknown>, payload: Record<string, unknown>): Promise<VerificationResult> => {
     try {
       const alg = header.alg;
       const kid = header.kid;
@@ -148,10 +148,10 @@ export const JwtDecoder: React.FC = () => {
         error: error instanceof Error ? error.message : 'Signature verification failed'
       };
     }
-  };
+  }, [fetchJwks, base64UrlToUint8Array]);
 
   // Helper function to convert base64url to Uint8Array
-  const base64UrlToUint8Array = (base64url: string): Uint8Array => {
+  const base64UrlToUint8Array = useCallback((base64url: string): Uint8Array => {
     const base64 = base64url
       .replace(/-/g, '+')
       .replace(/_/g, '/');
@@ -161,7 +161,7 @@ export const JwtDecoder: React.FC = () => {
       outputArray[i] = rawData.charCodeAt(i);
     }
     return outputArray;
-  };
+  }, []);
 
   useEffect(() => {
     setError('');
@@ -201,13 +201,13 @@ export const JwtDecoder: React.FC = () => {
     };
 
     processJwt();
-  }, [jwt]);
+  }, [jwt, verifyJwtSignature]);
 
-  const formatJson = (obj: any) => {
+  const formatJson = (obj: unknown) => {
     return JSON.stringify(obj, null, 2);
   };
 
-  const copyDecoded = (data: any) => {
+  const copyDecoded = (data: unknown) => {
     copyToClipboard(formatJson(data));
   };
 

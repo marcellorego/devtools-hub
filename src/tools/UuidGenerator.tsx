@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, RefreshCw, Zap, Hash, Clock } from 'lucide-react';
 import { v4 as uuidv4, v5 as uuidv5 } from 'uuid';
@@ -12,7 +12,7 @@ export const UuidGenerator: React.FC = () => {
   const [timestamp, setTimestamp] = useState<Date | null>(null);
   const { copyToClipboard, copied } = useClipboard();
 
-  const generateUuid = () => {
+  const generateUuid = useCallback(() => {
     const now = new Date();
     setTimestamp(now);
 
@@ -30,7 +30,7 @@ export const UuidGenerator: React.FC = () => {
         setVersion('v4');
       }
     }
-  };
+  }, [version, name, namespace]);
 
   const handleVersionChange = (newVersion: 'v4' | 'v5') => {
     setVersion(newVersion);
@@ -51,7 +51,7 @@ export const UuidGenerator: React.FC = () => {
   // Generate initial UUID
   React.useEffect(() => {
     generateUuid();
-  }, []);
+  }, [generateUuid]);
 
   return (
     <div className="h-full flex flex-col">
