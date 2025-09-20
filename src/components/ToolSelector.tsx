@@ -149,126 +149,143 @@ export const ToolSelector: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Desktop circular selector */}
-      <div className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-50">
+      {/* Desktop vertical control panel */}
+      <div className="hidden lg:block fixed left-4 top-1/2 -translate-y-1/2 z-50">
         <div className="relative">
-          {/* Central hub glow */}
+          {/* Background glow effect */}
           <motion.div
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-xl pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-b from-purple-600/10 to-pink-600/10 blur-xl rounded-3xl"
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.2, 0.4, 0.2]
+              scale: [1, 1.05, 1],
+              opacity: [0.3, 0.6, 0.3]
             }}
             transition={{
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
 
-          {/* Tool buttons in a circle - improved positioning */}
-          <div className="relative w-[28rem] h-[28rem]">
-            {tools.map((tool, index) => {
-              const angle = (index * 360) / tools.length;
-              const radius = 160; // Optimized radius for 6 tools
-              const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
-              const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
-
-              const isActive = activeTool === tool.id;
-
-              return (
-                <motion.button
-                  key={tool.id}
-                className={clsx(
-                  "absolute w-20 h-20 rounded-full flex items-center justify-center",
-                  "bg-gradient-to-r transition-all duration-300",
-                  "hover:scale-110 hover:shadow-2xl",
-                  "focus:outline-none focus:ring-2 focus:ring-white/50",
-                  "border-2 border-white/20",
-                  tool.color,
-                  tool.glowColor,
-                  isActive && "ring-4 ring-white/70 scale-125 shadow-2xl border-white/50"
-                )}
-                  style={{
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`
-                  }}
-                  onClick={() => setActiveTool(tool.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setActiveTool(tool.id);
-                    }
-                  }}
-                  aria-label={`Select ${tool.name} tool`}
-                  aria-pressed={isActive}
-                  role="button"
-                  tabIndex={0}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    delay: index * 0.1,
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 20
-                  }}
-                >
-                  <motion.div
-                    animate={isActive ? {
-                      rotate: [0, -10, 10, -10, 0],
-                      scale: [1, 1.1, 1]
-                    } : {}}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {tool.icon}
-                  </motion.div>
-
-                  {/* Tool label - improved positioning and visibility */}
-                  <motion.div
-                    className={clsx(
-                      "absolute -bottom-16 left-1/2 -translate-x-1/2",
-                      "text-xs font-medium text-white/90 whitespace-nowrap",
-                      "bg-black/80 px-3 py-1.5 rounded-lg backdrop-blur-sm",
-                      "pointer-events-none shadow-lg",
-                      "border border-white/10",
-                      isActive && "bg-purple-600/90 text-white border-purple-400/60 shadow-purple-500/50"
-                    )}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{
-                      opacity: isActive ? 1 : 0.8,
-                      y: isActive ? 0 : 3,
-                      scale: isActive ? 1.05 : 0.95
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {tool.name}
-                  </motion.div>
-                </motion.button>
-              );
-            })}
-
-            {/* Center hub - proportional to larger circle */}
+          {/* Control panel container */}
+          <div className="relative bg-gradient-to-b from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 shadow-2xl">
+            
+            {/* Hub header */}
             <motion.div
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
-              whileHover={{ scale: 1.05 }}
+              className="mb-6 text-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
             >
-              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500/50 flex items-center justify-center shadow-2xl">
+              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg">
                 <motion.div
-                  className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center"
                   animate={{
+                    rotate: [0, 360],
                     boxShadow: [
-                      "0 0 25px rgba(147, 51, 234, 0.4)",
-                      "0 0 50px rgba(147, 51, 234, 0.7)",
-                      "0 0 25px rgba(147, 51, 234, 0.4)"
+                      "0 0 20px rgba(147, 51, 234, 0.4)",
+                      "0 0 40px rgba(147, 51, 234, 0.8)",
+                      "0 0 20px rgba(147, 51, 234, 0.4)"
                     ]
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ 
+                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                    boxShadow: { duration: 2, repeat: Infinity }
+                  }}
                 >
-                  <Zap className="text-white" size={28} />
+                  <Zap className="text-white" size={24} />
                 </motion.div>
+              </div>
+              <h3 className="text-sm font-bold text-white">DevTools</h3>
+              <p className="text-xs text-gray-400">Control Panel</p>
+            </motion.div>
+
+            {/* Tool buttons in vertical stack */}
+            <div className="space-y-3">
+              {tools.map((tool, index) => {
+                const isActive = activeTool === tool.id;
+
+                return (
+                  <motion.button
+                    key={tool.id}
+                    onClick={() => setActiveTool(tool.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveTool(tool.id);
+                      }
+                    }}
+                    className={clsx(
+                      "group relative w-16 h-16 rounded-xl flex items-center justify-center",
+                      "bg-gradient-to-r transition-all duration-300",
+                      "hover:scale-110 hover:shadow-xl",
+                      "focus:outline-none focus:ring-2 focus:ring-purple-500/50",
+                      "border border-white/10",
+                      tool.color,
+                      isActive && "ring-2 ring-purple-400/70 scale-110 shadow-xl border-purple-400/50"
+                    )}
+                    aria-label={`Select ${tool.name} tool`}
+                    aria-pressed={isActive}
+                    role="button"
+                    tabIndex={0}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 20
+                    }}
+                  >
+                    <motion.div
+                      animate={isActive ? {
+                        rotate: [0, -10, 10, -10, 0],
+                        scale: [1, 1.1, 1]
+                      } : {}}
+                      transition={{ duration: 0.6 }}
+                    >
+                      {tool.icon}
+                    </motion.div>
+
+                    {/* Tooltip on hover */}
+                    <motion.div
+                      className="absolute left-20 top-1/2 -translate-y-1/2 bg-gray-900/95 text-white text-sm px-3 py-2 rounded-lg backdrop-blur-sm border border-gray-700/50 shadow-xl pointer-events-none opacity-0 group-hover:opacity-100 whitespace-nowrap z-10"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileHover={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {tool.name}
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-gray-900/95"></div>
+                    </motion.div>
+
+                    {/* Active indicator */}
+                    {isActive && (
+                      <motion.div
+                        className="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"
+                        initial={{ scaleY: 0 }}
+                        animate={{ scaleY: 1 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Footer info */}
+            <motion.div
+              className="mt-6 pt-4 border-t border-gray-700/50 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                <motion.div
+                  className="w-2 h-2 bg-green-500 rounded-full"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <span>Online</span>
               </div>
             </motion.div>
           </div>
