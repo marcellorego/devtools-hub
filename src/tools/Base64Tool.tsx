@@ -47,7 +47,7 @@ export const Base64Tool: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

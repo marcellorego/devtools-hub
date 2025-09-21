@@ -199,6 +199,53 @@
   }
 }
 
+/* Responsive Scrolling Behavior */
+.responsive-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling for modern browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Mobile-specific scroll optimizations */
+@media (max-width: 767px) {
+  body {
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent rubber band effect */
+    overscroll-behavior: none;
+  }
+  
+  /* Ensure proper scroll padding for fixed elements */
+  .mobile-scroll-content {
+    scroll-padding-top: 4rem; /* Account for mobile menu button */
+  }
+}
+
+/* Tablet landscape scroll optimizations */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .tablet-scroll-content {
+    scroll-padding-top: 5rem; /* Account for horizontal toolbar */
+  }
+}
+
+/* Scroll margin for better focus management */
+.scroll-margin-top {
+  scroll-margin-top: 2rem;
+}
+
+/* Ensure content doesn't hide behind fixed navigation */
+@media (max-width: 1023px) {
+  .content-with-fixed-nav {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,

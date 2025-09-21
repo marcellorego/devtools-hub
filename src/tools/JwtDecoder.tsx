@@ -229,7 +229,7 @@ export const JwtDecoder: React.FC = () => {
   const expStatus = getExpirationStatus();
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -376,7 +376,7 @@ export const JwtDecoder: React.FC = () => {
             transition={{ delay: 0.3 }}
             className="lg:col-span-2"
           >
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 h-full">
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white capitalize flex items-center gap-2">
                   <Key size={20} />

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ErrorBoundary from './ErrorBoundary';
 
 const LoadingSpinner: React.FC = () => (
-  <div className="flex items-center justify-center h-full">
+  <div className="flex items-center justify-center min-h-full">
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -79,8 +79,8 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
   const ActiveToolComponent = toolComponents[activeTool as keyof typeof toolComponents];
 
   return (
-    <main id="main-content" className="flex-1 ml-0 md:ml-0 lg:ml-[26rem] pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 overflow-hidden transition-all duration-300">
-      <div className="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-7xl mx-auto h-full">
+    <main id="main-content" className="flex-1 ml-0 md:ml-0 lg:ml-[26rem] pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 transition-all duration-300 mobile-scroll-content tablet-scroll-content content-with-fixed-nav">
+      <div className="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-7xl mx-auto min-h-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTool}
@@ -88,7 +88,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="h-full"
+            className="min-h-full"
           >
             {/* Background grid effect */}
             <div className="absolute inset-0 opacity-5">
@@ -128,7 +128,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
             </div>
 
             {/* Tool content */}
-            <div className="relative z-10 h-full">
+            <div className="relative z-10 min-h-full">
               {ActiveToolComponent ? (
                 <ErrorBoundary toolName={toolNames[activeTool as keyof typeof toolNames]}>
                   <Suspense fallback={<LoadingSpinner />}>
@@ -136,7 +136,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
                   </Suspense>
                 </ErrorBoundary>
               ) : (
-                <div className="flex items-center justify-center h-full">
+                <div className="flex items-center justify-center min-h-full">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}

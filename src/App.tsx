@@ -16,7 +16,7 @@ function App() {
   }, [lastUsedTool, activeTool, setActiveTool]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white overflow-hidden portrait-mobile responsive-transition" role="application" aria-label="DevTools Hub - Developer Tools Collection">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white portrait-mobile responsive-transition responsive-scroll" role="application" aria-label="DevTools Hub - Developer Tools Collection">
       {/* Skip to main content link for accessibility */}
       <a
         href="#main-content"
@@ -34,7 +34,7 @@ function App() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex h-screen">
+      <div className="relative z-10 flex min-h-screen">
         <ToolSelector />
         <Workspace activeTool={activeTool} />
       </div>
