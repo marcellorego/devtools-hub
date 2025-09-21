@@ -68,8 +68,16 @@
 
 /* Custom selection */
 ::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a2e;
+  text-shadow: none;
+}
+
+/* Firefox selection */
+::-moz-selection {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a2e;
+  text-shadow: none;
 }
 
 /* Glass morphism effect */
