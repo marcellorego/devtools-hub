@@ -13,8 +13,10 @@ interface Tool {
 }
 
 interface ToolSelectorProps {
-  docked: boolean;
-  setDocked: (docked: boolean) => void;
+  desktopSidebarVisible: boolean;
+  setDesktopSidebarVisible: (visible: boolean) => void;
+  desktopSidebarPinned: boolean;
+  setDesktopSidebarPinned: (pinned: boolean) => void;
 }
 
 const tools: Tool[] = [
@@ -62,36 +64,33 @@ const tools: Tool[] = [
   }
 ];
 
-export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked }) => {
+export const ToolSelector: React.FC<ToolSelectorProps> = ({ 
+  desktopSidebarVisible, 
+  setDesktopSidebarVisible, 
+  desktopSidebarPinned, 
+  setDesktopSidebarPinned 
+}) => {
   const activeTool = useAppStore((state) => state.activeTool);
   const setActiveTool = useAppStore((state) => state.setActiveTool);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [desktopSidebarHovered, setDesktopSidebarHovered] = useState(false);
 
-  const toggleDock = () => {
-    setDocked(!docked);
-    if (!docked) {
-      // When docking, ensure menu is open
-      setMobileMenuOpen(true);
-    }
+  const toggleDesktopSidebarPin = () => {
+    setDesktopSidebarPinned(!desktopSidebarPinned);
   };
 
-  const handleMenuToggle = () => {
-    if (docked) {
-      // If docked, undock and close
-      setDocked(false);
-      setMobileMenuOpen(false);
+  const handleDesktopSidebarToggle = () => {
+    if (desktopSidebarVisible) {
+      setDesktopSidebarVisible(false);
     } else {
-      // Normal toggle behavior
-      setMobileMenuOpen(!mobileMenuOpen);
+      setDesktopSidebarVisible(true);
     }
   };
 
-  const handleToolSelection = (toolId: string) => {
+  const handleMobileToolSelection = (toolId: string) => {
     setActiveTool(toolId);
-    // Only close menu if not docked
-    if (!docked) {
-      setMobileMenuOpen(false);
-    }
+    // Mobile menu always closes after selection
+    setMobileMenuOpen(false);
   };
 
   // Remove debug logging for production
@@ -101,22 +100,14 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
       {/* Mobile/Tablet menu button */}
       <div className="fixed top-4 left-4 z-50 md:hidden lg:hidden xl:hidden">
         <motion.button
-          onClick={handleMenuToggle}
-          className={clsx(
-            "min-w-44 min-h-44 w-12 h-12 xs:w-14 xs:h-14 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200",
-            docked 
-              ? "bg-gradient-to-r from-green-600 to-emerald-600" 
-              : "bg-gradient-to-r from-purple-600 to-pink-600"
-          )}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="min-w-44 min-h-44 w-12 h-12 xs:w-14 xs:h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200"
           whileTap={{ scale: 0.95 }}
-          aria-label={docked ? "Undock navigation menu" : mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
         >
-          {mobileMenuOpen && !docked ? <X size={20} /> : <Menu size={20} />}
-          {docked && (
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
-          )}
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </motion.button>
       </div>
 
@@ -153,8 +144,8 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
         </div>
       </div>
 
-      {/* Mobile menu overlay - only show when not docked */}
-      {mobileMenuOpen && !docked && (
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -171,47 +162,25 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
         aria-label="Tool navigation menu"
         initial={{ x: -300, opacity: 0 }}
         animate={{
-          x: (mobileMenuOpen || docked) ? 0 : -300,
-          opacity: (mobileMenuOpen || docked) ? 1 : 0
+          x: mobileMenuOpen ? 0 : -300,
+          opacity: mobileMenuOpen ? 1 : 0
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={clsx(
-          "fixed left-0 top-0 h-full w-72 xs:w-80 sm:w-96 bg-gradient-to-b from-gray-900 to-gray-800 border-r z-50 md:hidden lg:hidden",
-          docked 
-            ? "border-green-500/50 shadow-2xl shadow-green-500/20" 
-            : "border-gray-700"
-        )}
+        className="fixed left-0 top-0 h-full w-72 xs:w-80 sm:w-96 bg-gradient-to-b from-gray-900 to-gray-800 border-r border-gray-700 z-50 md:hidden lg:hidden"
       >
         <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl xs:text-2xl font-bold text-white">DevTool Hub</h2>
-            <motion.button
-              onClick={toggleDock}
-              className={clsx(
-                "min-w-44 min-h-44 p-2 rounded-lg flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50",
-                docked 
-                  ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg" 
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
-              )}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              aria-label={docked ? "Undock menu" : "Dock menu"}
-              title={docked ? "Undock menu" : "Dock menu"}
-            >
-              {docked ? <Pin size={16} /> : <PinOff size={16} />}
-            </motion.button>
-          </div>
+          <h2 className="text-xl xs:text-2xl font-bold text-white mb-6">DevTool Hub</h2>
           <div className="space-y-4">
             {tools.map((tool, index) => {
               const isActive = activeTool === tool.id;
               return (
                 <motion.button
                   key={tool.id}
-                  onClick={() => handleToolSelection(tool.id)}
+                  onClick={() => handleMobileToolSelection(tool.id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      handleToolSelection(tool.id);
+                      handleMobileToolSelection(tool.id);
                     }
                   }}
                   className={clsx(
@@ -240,8 +209,37 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
         </div>
       </motion.div>
 
+      {/* Desktop sidebar toggle button - when sidebar is hidden and pinned */}
+      {!desktopSidebarVisible && desktopSidebarPinned && (
+        <div className="hidden lg:block xl:block 2xl:block fixed left-4 top-4 z-50">
+          <motion.button
+            onClick={handleDesktopSidebarToggle}
+            className="min-w-44 min-h-44 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Show sidebar"
+            title="Show sidebar"
+          >
+            <Menu size={20} />
+          </motion.button>
+        </div>
+      )}
+
+      {/* Hover trigger area for unpinned sidebar */}
+      {!desktopSidebarVisible && !desktopSidebarPinned && (
+        <div 
+          className="hidden lg:block xl:block 2xl:block fixed left-0 top-0 w-16 h-full z-40"
+          onMouseEnter={() => setDesktopSidebarHovered(true)}
+        />
+      )}
+
       {/* Desktop vertical control panel */}
-      <div className="hidden lg:block xl:block 2xl:block fixed left-4 top-1/2 -translate-y-1/2 z-50">
+      {(desktopSidebarVisible || (!desktopSidebarPinned && desktopSidebarHovered)) && (
+        <div 
+          className="hidden lg:block xl:block 2xl:block fixed left-4 top-1/2 -translate-y-1/2 z-50"
+          onMouseEnter={() => !desktopSidebarPinned && setDesktopSidebarHovered(true)}
+          onMouseLeave={() => !desktopSidebarPinned && setDesktopSidebarHovered(false)}
+        >
         <div className="relative">
           {/* Background glow effect */}
           <motion.div
@@ -260,33 +258,66 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
           {/* Control panel container */}
           <div className="relative bg-gradient-to-b from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 shadow-2xl overflow-visible">
             
-            {/* Hub header */}
+            {/* Hub header with controls */}
             <motion.div
-              className="mb-6 text-center"
+              className="mb-6"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg">
-                <motion.div
-                  animate={{
-                    rotate: [0, 360],
-                    boxShadow: [
-                      "0 0 20px rgba(147, 51, 234, 0.4)",
-                      "0 0 40px rgba(147, 51, 234, 0.8)",
-                      "0 0 20px rgba(147, 51, 234, 0.4)"
-                    ]
-                  }}
-                  transition={{ 
-                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                    boxShadow: { duration: 2, repeat: Infinity }
-                  }}
+              {/* Control buttons */}
+              <div className="flex justify-between items-center mb-3">
+                <motion.button
+                  onClick={handleDesktopSidebarToggle}
+                  className="min-w-44 min-h-44 p-2 rounded-lg bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label="Hide sidebar"
+                  title="Hide sidebar"
                 >
-                  <Zap className="text-white" size={24} />
-                </motion.div>
+                  <X size={14} />
+                </motion.button>
+                
+                <motion.button
+                  onClick={toggleDesktopSidebarPin}
+                  className={clsx(
+                    "min-w-44 min-h-44 p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50",
+                    desktopSidebarPinned 
+                      ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg" 
+                      : "bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white"
+                  )}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
+                  title={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
+                >
+                  {desktopSidebarPinned ? <Pin size={14} /> : <PinOff size={14} />}
+                </motion.button>
               </div>
-              <h3 className="text-sm font-bold text-white">DevTools</h3>
-              <p className="text-xs text-gray-400">Control Panel</p>
+
+              {/* Logo and title */}
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg">
+                  <motion.div
+                    animate={{
+                      rotate: [0, 360],
+                      boxShadow: [
+                        "0 0 20px rgba(147, 51, 234, 0.4)",
+                        "0 0 40px rgba(147, 51, 234, 0.8)",
+                        "0 0 20px rgba(147, 51, 234, 0.4)"
+                      ]
+                    }}
+                    transition={{ 
+                      rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                      boxShadow: { duration: 2, repeat: Infinity }
+                    }}
+                  >
+                    <Zap className="text-white" size={24} />
+                  </motion.div>
+                </div>
+                <h3 className="text-sm font-bold text-white">DevTools</h3>
+                <p className="text-xs text-gray-400">Control Panel</p>
+              </div>
             </motion.div>
 
             {/* Tool buttons in vertical stack */}
@@ -384,7 +415,8 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked })
             </motion.div>
           </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
