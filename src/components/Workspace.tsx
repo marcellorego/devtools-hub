@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { clsx } from 'clsx';
 import ErrorBoundary from './ErrorBoundary';
 
 const LoadingSpinner: React.FC = () => (
@@ -29,6 +30,7 @@ const HashTool = lazy(() => import('../tools/HashTool').then(module => ({ defaul
 
 interface WorkspaceProps {
   activeTool: string;
+  docked: boolean;
 }
 
 const toolComponents = {
@@ -75,11 +77,20 @@ const workspaceVariants = {
   }
 };
 
-export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
+export const Workspace: React.FC<WorkspaceProps> = ({ activeTool, docked }) => {
   const ActiveToolComponent = toolComponents[activeTool as keyof typeof toolComponents];
 
   return (
-    <main id="main-content" className="flex-1 ml-0 md:ml-0 lg:ml-[26rem] pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 transition-all duration-300 mobile-scroll-content tablet-scroll-content content-with-fixed-nav">
+    <main 
+      id="main-content" 
+      className={clsx(
+        "flex-1 pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 transition-all duration-300 mobile-scroll-content tablet-scroll-content content-with-fixed-nav",
+        // Mobile and tablet margins - account for docked menu
+        docked ? "ml-72 xs:ml-80 sm:ml-96 md:ml-0" : "ml-0 md:ml-0",
+        // Desktop margin for sidebar
+        "lg:ml-[26rem]"
+      )}
+    >
       <div className="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-7xl mx-auto min-h-full">
         <AnimatePresence mode="wait">
           <motion.div

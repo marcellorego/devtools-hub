@@ -7,6 +7,7 @@ function App() {
   const activeTool = useAppStore((state) => state.activeTool);
   const lastUsedTool = useAppStore((state) => state.lastUsedTool);
   const setActiveTool = useAppStore((state) => state.setActiveTool);
+  const [menuDocked, setMenuDocked] = React.useState(false);
 
   // Initialize with last used tool
   React.useEffect(() => {
@@ -35,8 +36,8 @@ function App() {
 
       {/* Main content */}
       <div className="relative z-10 flex min-h-screen">
-        <ToolSelector />
-        <Workspace activeTool={activeTool} />
+        <ToolSelector docked={menuDocked} setDocked={setMenuDocked} />
+        <Workspace activeTool={activeTool} docked={menuDocked} />
       </div>
     </div>
   );

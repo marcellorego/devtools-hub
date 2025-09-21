@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Code, Link, Clock, Hash, Key, Menu, X } from 'lucide-react';
+import { Zap, Code, Link, Clock, Hash, Key, Menu, X, Pin, PinOff } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAppStore } from '../store/appStore';
 
@@ -10,6 +10,11 @@ interface Tool {
   icon: React.ReactNode;
   color: string;
   glowColor: string;
+}
+
+interface ToolSelectorProps {
+  docked: boolean;
+  setDocked: (docked: boolean) => void;
 }
 
 const tools: Tool[] = [
@@ -57,10 +62,37 @@ const tools: Tool[] = [
   }
 ];
 
-export const ToolSelector: React.FC = () => {
+export const ToolSelector: React.FC<ToolSelectorProps> = ({ docked, setDocked }) => {
   const activeTool = useAppStore((state) => state.activeTool);
   const setActiveTool = useAppStore((state) => state.setActiveTool);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleDock = () => {
+    setDocked(!docked);
+    if (!docked) {
+      // When docking, ensure menu is open
+      setMobileMenuOpen(true);
+    }
+  };
+
+  const handleMenuToggle = () => {
+    if (docked) {
+      // If docked, undock and close
+      setDocked(false);
+      setMobileMenuOpen(false);
+    } else {
+      // Normal toggle behavior
+      setMobileMenuOpen(!mobileMenuOpen);
+    }
+  };
+
+  const handleToolSelection = (toolId: string) => {
+    setActiveTool(toolId);
+    // Only close menu if not docked
+    if (!docked) {
+      setMobileMenuOpen(false);
+    }
+  };
 
   // Remove debug logging for production
 
@@ -69,14 +101,22 @@ export const ToolSelector: React.FC = () => {
       {/* Mobile/Tablet menu button */}
       <div className="fixed top-4 left-4 z-50 md:hidden lg:hidden xl:hidden">
         <motion.button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="min-w-44 min-h-44 w-12 h-12 xs:w-14 xs:h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200"
+          onClick={handleMenuToggle}
+          className={clsx(
+            "min-w-44 min-h-44 w-12 h-12 xs:w-14 xs:h-14 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200",
+            docked 
+              ? "bg-gradient-to-r from-green-600 to-emerald-600" 
+              : "bg-gradient-to-r from-purple-600 to-pink-600"
+          )}
           whileTap={{ scale: 0.95 }}
-          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={docked ? "Undock navigation menu" : mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
         >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileMenuOpen && !docked ? <X size={20} /> : <Menu size={20} />}
+          {docked && (
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
+          )}
         </motion.button>
       </div>
 
@@ -113,8 +153,8 @@ export const ToolSelector: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu overlay */}
-      {mobileMenuOpen && (
+      {/* Mobile menu overlay - only show when not docked */}
+      {mobileMenuOpen && !docked && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -131,29 +171,47 @@ export const ToolSelector: React.FC = () => {
         aria-label="Tool navigation menu"
         initial={{ x: -300, opacity: 0 }}
         animate={{
-          x: mobileMenuOpen ? 0 : -300,
-          opacity: mobileMenuOpen ? 1 : 0
+          x: (mobileMenuOpen || docked) ? 0 : -300,
+          opacity: (mobileMenuOpen || docked) ? 1 : 0
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-72 xs:w-80 sm:w-96 bg-gradient-to-b from-gray-900 to-gray-800 border-r border-gray-700 z-50 md:hidden lg:hidden"
+        className={clsx(
+          "fixed left-0 top-0 h-full w-72 xs:w-80 sm:w-96 bg-gradient-to-b from-gray-900 to-gray-800 border-r z-50 md:hidden lg:hidden",
+          docked 
+            ? "border-green-500/50 shadow-2xl shadow-green-500/20" 
+            : "border-gray-700"
+        )}
       >
         <div className="p-6">
-          <h2 className="text-xl xs:text-2xl font-bold text-white mb-6">DevTool Hub</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl xs:text-2xl font-bold text-white">DevTool Hub</h2>
+            <motion.button
+              onClick={toggleDock}
+              className={clsx(
+                "min-w-44 min-h-44 p-2 rounded-lg flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50",
+                docked 
+                  ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg" 
+                  : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
+              )}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label={docked ? "Undock menu" : "Dock menu"}
+              title={docked ? "Undock menu" : "Dock menu"}
+            >
+              {docked ? <Pin size={16} /> : <PinOff size={16} />}
+            </motion.button>
+          </div>
           <div className="space-y-4">
             {tools.map((tool, index) => {
               const isActive = activeTool === tool.id;
               return (
                 <motion.button
                   key={tool.id}
-                  onClick={() => {
-                    setActiveTool(tool.id);
-                    setMobileMenuOpen(false);
-                  }}
+                  onClick={() => handleToolSelection(tool.id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      setActiveTool(tool.id);
-                      setMobileMenuOpen(false);
+                      handleToolSelection(tool.id);
                     }
                   }}
                   className={clsx(
