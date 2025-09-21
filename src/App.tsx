@@ -7,7 +7,6 @@ function App() {
   const activeTool = useAppStore((state) => state.activeTool);
   const lastUsedTool = useAppStore((state) => state.lastUsedTool);
   const setActiveTool = useAppStore((state) => state.setActiveTool);
-  const [desktopSidebarVisible, setDesktopSidebarVisible] = React.useState(true);
   const [desktopSidebarPinned, setDesktopSidebarPinned] = React.useState(true);
 
   // Initialize with last used tool
@@ -38,14 +37,11 @@ function App() {
       {/* Main content */}
       <div className="relative z-10 flex min-h-screen">
         <ToolSelector 
-          desktopSidebarVisible={desktopSidebarVisible}
-          setDesktopSidebarVisible={setDesktopSidebarVisible}
           desktopSidebarPinned={desktopSidebarPinned}
           setDesktopSidebarPinned={setDesktopSidebarPinned}
         />
         <Workspace 
           activeTool={activeTool} 
-          desktopSidebarVisible={desktopSidebarVisible}
           desktopSidebarPinned={desktopSidebarPinned}
         />
       </div>

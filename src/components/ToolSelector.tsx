@@ -13,8 +13,6 @@ interface Tool {
 }
 
 interface ToolSelectorProps {
-  desktopSidebarVisible: boolean;
-  setDesktopSidebarVisible: (visible: boolean) => void;
   desktopSidebarPinned: boolean;
   setDesktopSidebarPinned: (pinned: boolean) => void;
 }
@@ -65,8 +63,6 @@ const tools: Tool[] = [
 ];
 
 export const ToolSelector: React.FC<ToolSelectorProps> = ({ 
-  desktopSidebarVisible, 
-  setDesktopSidebarVisible, 
   desktopSidebarPinned, 
   setDesktopSidebarPinned 
 }) => {
@@ -77,14 +73,6 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
 
   const toggleDesktopSidebarPin = () => {
     setDesktopSidebarPinned(!desktopSidebarPinned);
-  };
-
-  const handleDesktopSidebarToggle = () => {
-    if (desktopSidebarVisible) {
-      setDesktopSidebarVisible(false);
-    } else {
-      setDesktopSidebarVisible(true);
-    }
   };
 
   const handleMobileToolSelection = (toolId: string) => {
@@ -209,37 +197,20 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
         </div>
       </motion.div>
 
-      {/* Desktop sidebar toggle button - when sidebar is hidden and pinned */}
-      {!desktopSidebarVisible && desktopSidebarPinned && (
-        <div className="hidden lg:block xl:block 2xl:block fixed left-4 top-4 z-50">
-          <motion.button
-            onClick={handleDesktopSidebarToggle}
-            className="min-w-44 min-h-44 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Show sidebar"
-            title="Show sidebar"
-          >
-            <Menu size={20} />
-          </motion.button>
-        </div>
-      )}
-
-      {/* Hover trigger area for unpinned sidebar */}
-      {!desktopSidebarVisible && !desktopSidebarPinned && (
-        <div 
-          className="hidden lg:block xl:block 2xl:block fixed left-0 top-0 w-16 h-full z-40"
-          onMouseEnter={() => setDesktopSidebarHovered(true)}
-        />
-      )}
-
       {/* Desktop vertical control panel */}
-      {(desktopSidebarVisible || (!desktopSidebarPinned && desktopSidebarHovered)) && (
-        <div 
-          className="hidden lg:block xl:block 2xl:block fixed left-4 top-1/2 -translate-y-1/2 z-50"
-          onMouseEnter={() => !desktopSidebarPinned && setDesktopSidebarHovered(true)}
-          onMouseLeave={() => !desktopSidebarPinned && setDesktopSidebarHovered(false)}
-        >
+      <div 
+        className={clsx(
+          "hidden lg:block xl:block 2xl:block fixed top-1/2 -translate-y-1/2 z-50 transition-all duration-300 ease-in-out",
+          // Position based on pinned state and hover
+          desktopSidebarPinned 
+            ? "left-4"  // Always at 1rem when pinned
+            : desktopSidebarHovered 
+              ? "left-4"  // At 1rem when hovered and unpinned
+              : "-left-24"  // Slide to -6rem when not hovered and unpinned
+        )}
+        onMouseEnter={() => setDesktopSidebarHovered(true)}
+        onMouseLeave={() => setDesktopSidebarHovered(false)}
+      >
         <div className="relative">
           {/* Background glow effect */}
           <motion.div
@@ -265,30 +236,19 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
             >
-              {/* Control buttons */}
-              <div className="flex justify-between items-center mb-3">
-                <motion.button
-                  onClick={handleDesktopSidebarToggle}
-                  className="min-w-44 min-h-44 p-2 rounded-lg bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label="Hide sidebar"
-                  title="Hide sidebar"
-                >
-                  <X size={14} />
-                </motion.button>
-                
+              {/* Pin control button */}
+              <div className="flex justify-center mb-3">
                 <motion.button
                   onClick={toggleDesktopSidebarPin}
                   className={clsx(
                     "min-w-44 min-h-44 p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50",
                     desktopSidebarPinned 
-                      ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg" 
+                      ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
                       : "bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white"
                   )}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  aria-label={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
+                  aria-label={desktopSidebarPinned ? "Unpin sidebar - will auto-hide when not hovered" : "Pin sidebar - will stay visible always"}
                   title={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
                 >
                   {desktopSidebarPinned ? <Pin size={14} /> : <PinOff size={14} />}
@@ -316,7 +276,9 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
                   </motion.div>
                 </div>
                 <h3 className="text-sm font-bold text-white">DevTools</h3>
-                <p className="text-xs text-gray-400">Control Panel</p>
+                <p className="text-xs text-gray-400">
+                  {desktopSidebarPinned ? "Always Visible" : "Hover to Show"}
+                </p>
               </div>
             </motion.div>
 
@@ -415,8 +377,7 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
             </motion.div>
           </div>
         </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

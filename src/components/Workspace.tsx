@@ -30,7 +30,6 @@ const HashTool = lazy(() => import('../tools/HashTool').then(module => ({ defaul
 
 interface WorkspaceProps {
   activeTool: string;
-  desktopSidebarVisible: boolean;
   desktopSidebarPinned: boolean;
 }
 
@@ -78,7 +77,7 @@ const workspaceVariants = {
   }
 };
 
-export const Workspace: React.FC<WorkspaceProps> = ({ activeTool, desktopSidebarVisible, desktopSidebarPinned }) => {
+export const Workspace: React.FC<WorkspaceProps> = ({ activeTool, desktopSidebarPinned }) => {
   const ActiveToolComponent = toolComponents[activeTool as keyof typeof toolComponents];
 
   return (
@@ -88,8 +87,8 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool, desktopSidebar
         "flex-1 pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 transition-all duration-300 mobile-scroll-content tablet-scroll-content content-with-fixed-nav",
         // Mobile and tablet - no sidebar interference
         "ml-0 md:ml-0", 
-        // Desktop margin - only when sidebar is visible and pinned
-        desktopSidebarVisible && desktopSidebarPinned ? "lg:ml-[26rem]" : "lg:ml-0"
+        // Desktop margin - only when sidebar is pinned (always visible)
+        desktopSidebarPinned ? "lg:ml-[26rem]" : "lg:ml-0"
       )}
     >
       <div className="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-7xl mx-auto min-h-full">
