@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px', // Extra small devices
+        '3xl': '1600px', // Extra large devices
+      },
       colors: {
         'neon-purple': '#8b5cf6',
         'neon-blue': '#3b82f6',
@@ -14,6 +18,18 @@ export default {
         'dark-space': '#0f0f23',
         'space-dark': '#1a1a2e',
         'space-darker': '#111118',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '112': '28rem',
+        '128': '32rem',
+      },
+      minHeight: {
+        '44': '2.75rem', // Minimum touch target height
+      },
+      minWidth: {
+        '44': '2.75rem', // Minimum touch target width
       },
       animation: {
         'blob': 'blob 7s infinite',

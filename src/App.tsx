@@ -16,7 +16,7 @@ function App() {
   }, [lastUsedTool, activeTool, setActiveTool]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white overflow-hidden" role="application" aria-label="DevTools Hub - Developer Tools Collection">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white overflow-hidden portrait-mobile responsive-transition" role="application" aria-label="DevTools Hub - Developer Tools Collection">
       {/* Skip to main content link for accessibility */}
       <a
         href="#main-content"

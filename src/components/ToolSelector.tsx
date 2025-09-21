@@ -66,11 +66,11 @@ export const ToolSelector: React.FC = () => {
 
   return (
     <div>
-      {/* Mobile menu button */}
-      <div className="fixed top-4 left-4 z-50 lg:hidden">
+      {/* Mobile/Tablet menu button */}
+      <div className="fixed top-4 left-4 z-50 md:hidden lg:hidden xl:hidden">
         <motion.button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50"
+          className="min-w-44 min-h-44 w-12 h-12 xs:w-14 xs:h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-200"
           whileTap={{ scale: 0.95 }}
           aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileMenuOpen}
@@ -80,13 +80,46 @@ export const ToolSelector: React.FC = () => {
         </motion.button>
       </div>
 
+      {/* Tablet horizontal toolbar */}
+      <div className="hidden md:block lg:hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-2 shadow-2xl">
+          <div className="flex items-center gap-2">
+            {tools.map((tool, index) => {
+              const isActive = activeTool === tool.id;
+              return (
+                <motion.button
+                  key={tool.id}
+                  onClick={() => setActiveTool(tool.id)}
+                  className={clsx(
+                    "min-w-44 min-h-44 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300",
+                    "bg-gradient-to-r border border-white/10",
+                    "focus:outline-none focus:ring-2 focus:ring-purple-500/50",
+                    tool.color,
+                    isActive && "ring-2 ring-purple-400/70 scale-110 shadow-xl border-purple-400/50"
+                  )}
+                  aria-label={`Select ${tool.name} tool`}
+                  title={tool.name}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  {tool.icon}
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -102,11 +135,11 @@ export const ToolSelector: React.FC = () => {
           opacity: mobileMenuOpen ? 1 : 0
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-gray-900 to-gray-800 border-r border-gray-700 z-50 lg:hidden"
+        className="fixed left-0 top-0 h-full w-72 xs:w-80 sm:w-96 bg-gradient-to-b from-gray-900 to-gray-800 border-r border-gray-700 z-50 md:hidden lg:hidden"
       >
         <div className="p-6">
-          <h2 className="text-xl font-bold text-white mb-6">DevTool Hub</h2>
-          <div className="space-y-3">
+          <h2 className="text-xl xs:text-2xl font-bold text-white mb-6">DevTool Hub</h2>
+          <div className="space-y-4">
             {tools.map((tool, index) => {
               const isActive = activeTool === tool.id;
               return (
@@ -124,7 +157,7 @@ export const ToolSelector: React.FC = () => {
                     }
                   }}
                   className={clsx(
-                    "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
+                    "w-full min-h-44 flex items-center gap-3 px-4 py-4 xs:py-5 rounded-lg transition-all duration-200",
                     "focus:outline-none focus:ring-2 focus:ring-purple-500",
                     isActive
                       ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
@@ -150,7 +183,7 @@ export const ToolSelector: React.FC = () => {
       </motion.div>
 
       {/* Desktop vertical control panel */}
-      <div className="hidden lg:block fixed left-4 top-1/2 -translate-y-1/2 z-50">
+      <div className="hidden lg:block xl:block 2xl:block fixed left-4 top-1/2 -translate-y-1/2 z-50">
         <div className="relative">
           {/* Background glow effect */}
           <motion.div
@@ -214,7 +247,7 @@ export const ToolSelector: React.FC = () => {
                       }
                     }}
                     className={clsx(
-                      "group relative w-16 h-16 rounded-xl flex items-center justify-center",
+                      "group relative min-w-44 min-h-44 w-16 h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 rounded-xl flex items-center justify-center",
                       "bg-gradient-to-r transition-all duration-300",
                       "hover:scale-110 hover:shadow-xl",
                       "focus:outline-none focus:ring-2 focus:ring-purple-500/50",

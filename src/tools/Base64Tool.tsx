@@ -52,13 +52,13 @@ export const Base64Tool: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-6 mb-8"
+        className="mt-4 sm:mt-6 md:mt-6 lg:mt-8 mb-4 sm:mb-6 md:mb-6 lg:mb-8 text-center"
       >
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+        <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
           Base64 Transformer
         </h1>
         <div role="banner" aria-label="Base64 tool description">
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm sm:text-base md:text-base lg:text-lg px-4">
             Encode and decode Base64 with style
           </p>
         </div>
@@ -73,7 +73,7 @@ export const Base64Tool: React.FC = () => {
       >
         <button
           onClick={toggleMode}
-          className="group relative px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full font-medium text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
+          className="group relative min-h-44 px-4 xs:px-6 py-3 xs:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full font-medium text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/50 text-sm xs:text-base"
           aria-label={`Switch to ${mode === 'encode' ? 'decode' : 'encode'} mode`}
           aria-pressed={mode === 'encode'}
         >
@@ -88,7 +88,7 @@ export const Base64Tool: React.FC = () => {
       </motion.div>
 
       {/* Input/Output Panels */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 md:gap-6 lg:gap-8">
         {/* Input Panel */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -157,7 +157,7 @@ export const Base64Tool: React.FC = () => {
                   }
                 }}
                 disabled={!output}
-                className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-sm rounded-lg hover:shadow-lg hover:shadow-green-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="flex items-center gap-2 min-h-44 px-3 xs:px-4 py-2 xs:py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs xs:text-sm rounded-lg hover:shadow-lg hover:shadow-green-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500"
                 aria-label={`Copy ${mode === 'encode' ? 'Base64' : 'decoded text'} to clipboard`}
                 aria-pressed={copied}
               >

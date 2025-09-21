@@ -60,7 +60,7 @@ export const HashTool: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mt-6 mb-8"
       >
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-2">
+        <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-2">
           Hash Tool
         </h1>
         <p className="text-gray-400">
@@ -116,7 +116,7 @@ export const HashTool: React.FC = () => {
       </motion.div>
 
       {/* Main Content */}
-      <div className={`flex-1 ${layout === 'horizontal' ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'flex flex-col gap-6'}`}>
+      <div className={`flex-1 ${layout === 'horizontal' ? 'grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 md:gap-6 lg:gap-8' : 'flex flex-col gap-4 sm:gap-6 md:gap-6 lg:gap-8'}`}>
         {/* Input Panel */}
         <motion.div
           initial={{ opacity: 0, x: layout === 'horizontal' ? -50 : 0 }}

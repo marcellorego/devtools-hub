@@ -234,12 +234,12 @@ export const JwtDecoder: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-6 mb-8"
+        className="mt-4 sm:mt-6 md:mt-6 lg:mt-8 mb-4 sm:mb-6 md:mb-6 lg:mb-8 text-center"
       >
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+        <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
           JWT Decoder
         </h1>
-        <p className="text-gray-400">
+        <p className="text-gray-400 text-sm sm:text-base md:text-base lg:text-lg px-4">
           Decode and inspect JSON Web Tokens with signature verification support
         </p>
       </motion.div>
@@ -284,7 +284,7 @@ export const JwtDecoder: React.FC = () => {
 
       {/* Decoded Content */}
       {decoded && (
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-6 lg:gap-8">
           {/* Tab Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}

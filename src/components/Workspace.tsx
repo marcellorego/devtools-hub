@@ -79,8 +79,8 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTool }) => {
   const ActiveToolComponent = toolComponents[activeTool as keyof typeof toolComponents];
 
   return (
-    <main id="main-content" className="flex-1 ml-0 lg:ml-[26rem] pt-16 lg:pt-0 p-4 sm:p-6 lg:p-8 overflow-hidden">
-      <div className="max-w-6xl mx-auto h-full">
+    <main id="main-content" className="flex-1 ml-0 md:ml-0 lg:ml-[26rem] pt-16 md:pt-18 lg:pt-0 p-4 sm:p-6 md:p-6 lg:p-8 xl:p-12 overflow-hidden transition-all duration-300">
+      <div className="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-7xl mx-auto h-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTool}
