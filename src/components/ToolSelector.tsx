@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Code, Link, Clock, Hash, Key, Menu, X, Pin, PinOff } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -70,6 +70,25 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
   const setActiveTool = useAppStore((state) => state.setActiveTool);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopSidebarHovered, setDesktopSidebarHovered] = useState(false);
+
+  // Track mouse position to determine hover behavior
+  useEffect(() => {
+    if (desktopSidebarPinned) return; // No need to track when pinned
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Show sidebar when mouse is in the left area (0-320px from left)
+      if (e.clientX <= 320) {
+        setDesktopSidebarHovered(true);
+      }
+      // Hide sidebar when mouse moves beyond the hover zone (>320px from left)
+      else if (e.clientX > 320) {
+        setDesktopSidebarHovered(false);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [desktopSidebarPinned]);
 
   const toggleDesktopSidebarPin = () => {
     setDesktopSidebarPinned(!desktopSidebarPinned);
@@ -197,6 +216,7 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
         </div>
       </motion.div>
 
+
       {/* Desktop vertical control panel */}
       <div 
         className={clsx(
@@ -208,8 +228,6 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
               ? "left-4"  // At 1rem when hovered and unpinned
               : "-left-24"  // Slide to -6rem when not hovered and unpinned
         )}
-        onMouseEnter={() => setDesktopSidebarHovered(true)}
-        onMouseLeave={() => setDesktopSidebarHovered(false)}
       >
         <div className="relative">
           {/* Background glow effect */}
