@@ -247,57 +247,33 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
           {/* Control panel container */}
           <div className="relative bg-gradient-to-b from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 shadow-2xl overflow-visible">
             
-            {/* Hub header with controls */}
+            {/* Hub header */}
             <motion.div
-              className="mb-6"
+              className="mb-6 text-center"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
             >
-              {/* Pin control button */}
-              <div className="flex justify-center mb-3">
-                <motion.button
-                  onClick={toggleDesktopSidebarPin}
-                  className={clsx(
-                    "min-w-44 min-h-44 p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50",
-                    desktopSidebarPinned 
-                      ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
-                      : "bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white"
-                  )}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={desktopSidebarPinned ? "Unpin sidebar - will auto-hide when not hovered" : "Pin sidebar - will stay visible always"}
-                  title={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
+              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg">
+                <motion.div
+                  animate={{
+                    rotate: [0, 360],
+                    boxShadow: [
+                      "0 0 20px rgba(147, 51, 234, 0.4)",
+                      "0 0 40px rgba(147, 51, 234, 0.8)",
+                      "0 0 20px rgba(147, 51, 234, 0.4)"
+                    ]
+                  }}
+                  transition={{ 
+                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                    boxShadow: { duration: 2, repeat: Infinity }
+                  }}
                 >
-                  {desktopSidebarPinned ? <Pin size={14} /> : <PinOff size={14} />}
-                </motion.button>
+                  <Zap className="text-white" size={24} />
+                </motion.div>
               </div>
-
-              {/* Logo and title */}
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg">
-                  <motion.div
-                    animate={{
-                      rotate: [0, 360],
-                      boxShadow: [
-                        "0 0 20px rgba(147, 51, 234, 0.4)",
-                        "0 0 40px rgba(147, 51, 234, 0.8)",
-                        "0 0 20px rgba(147, 51, 234, 0.4)"
-                      ]
-                    }}
-                    transition={{ 
-                      rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                      boxShadow: { duration: 2, repeat: Infinity }
-                    }}
-                  >
-                    <Zap className="text-white" size={24} />
-                  </motion.div>
-                </div>
-                <h3 className="text-sm font-bold text-white">DevTools</h3>
-                <p className="text-xs text-gray-400">
-                  {desktopSidebarPinned ? "Always Visible" : "Hover to Show"}
-                </p>
-              </div>
+              <h3 className="text-sm font-bold text-white">DevTools</h3>
+              <p className="text-xs text-gray-400">Control Panel</p>
             </motion.div>
 
             {/* Tool buttons in vertical stack */}
@@ -379,18 +355,38 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({
 
             {/* Footer info */}
             <motion.div
-              className="mt-6 pt-4 border-t border-gray-700/50 text-center"
+              className="mt-6 pt-4 border-t border-gray-700/50"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
             >
-              <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                <motion.div
-                  className="w-2 h-2 bg-green-500 rounded-full"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-                <span>Online</span>
+              <div className="flex items-center justify-between">
+                {/* Online status */}
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <motion.div
+                    className="w-2 h-2 bg-green-500 rounded-full"
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <span>Online</span>
+                </div>
+                
+                {/* Small pin button */}
+                <motion.button
+                  onClick={toggleDesktopSidebarPin}
+                  className={clsx(
+                    "p-1.5 rounded-md text-xs transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-purple-500/50",
+                    desktopSidebarPinned 
+                      ? "bg-green-600/20 text-green-400 hover:bg-green-600/30" 
+                      : "bg-gray-700/30 text-gray-500 hover:bg-gray-600/50 hover:text-gray-400"
+                  )}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label={desktopSidebarPinned ? "Unpin sidebar - will auto-hide when not hovered" : "Pin sidebar - will stay visible always"}
+                  title={desktopSidebarPinned ? "Unpin sidebar" : "Pin sidebar"}
+                >
+                  {desktopSidebarPinned ? <Pin size={10} /> : <PinOff size={10} />}
+                </motion.button>
               </div>
             </motion.div>
           </div>
